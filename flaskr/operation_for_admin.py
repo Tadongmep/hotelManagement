@@ -8,6 +8,10 @@ from flaskr.db import get_db
 
 bp = Blueprint('admin', __name__)
 
+@bp.route('/testConnectBackend', methods=('GET', 'POST'))
+def notification():
+    return jsonify({"foo": 1})
+
 @bp.route('/hotelRegister', methods=('GET', 'POST'))
 @login_required
 def hotel_register():
