@@ -64,6 +64,28 @@ def get_hotel():
     
     return jsonify({'message': 'get hotel information failed, require admin acc'}), 200
 
+@bp.route('/getRoom', methods=('GET', 'POST'))
+@login_required
+def get_room():
+    if g.user['position'] == 'admin':
+        message = []
+        
+        rooms = get_db().execute(
+            'SELECT * FROM rooms'
+        ).fetchall()
+        for room in rooms:
+            temp = {}
+            temp['id'] = room['id']
+            temp['belonging_to'] = room['belonging_to']
+            temp['kind_of_room'] = room['kind_of_room']
+            temp['room_name'] = room['room_name']
+            temp['created'] = room['created']
+            message.append(temp)
+
+        return jsonify({'message': message}), 200
+    
+    return jsonify({'message': 'get room information failed, require admin acc'}), 200
+
 @bp.route('/updateHotel', methods=('GET', 'POST'))
 @login_required
 def update_hotel():
