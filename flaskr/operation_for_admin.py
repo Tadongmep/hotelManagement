@@ -135,6 +135,14 @@ def create_room():
         room_name = request.get_json().get('room_name')
         error = None
 
+        if room_name:
+            room = get_db().execute(
+                'SELECT * FROM rooms WHERE room_name = ?', (room_name,)
+            ).fetchone()
+            # if str(room['id']) != id:
+            if room is not None:
+                error = "Room's name is exsit."
+                return jsonify({'message': error}), 200
         if not belonging_to:
             error = "Hotel's name is required."
             return jsonify({'message': error}), 200
@@ -173,13 +181,13 @@ def update_room():
         kind_of_room = request.get_json().get('kind_of_room')
         room_name = request.get_json().get('room_name')
         error = None
-        if room_name:
-            room = get_db().execute(
-                'SELECT * FROM rooms WHERE room_name = ?', (room_name,)
-            ).fetchone()
-            if str(room['id']) != id:
-                error = "Room's name is exsit."
-                return jsonify({'message': error}), 200
+        # if room_name:
+        #     room = get_db().execute(
+        #         'SELECT * FROM rooms WHERE room_name = ?', (room_name,)
+        #     ).fetchone()
+        #     if str(room['id']) != id:
+        #         error = "Room's name is exsit."
+        #         return jsonify({'message': error}), 200
         if not belonging_to:
             error = "Hotel's name is required."
             return jsonify({'message': error}), 200

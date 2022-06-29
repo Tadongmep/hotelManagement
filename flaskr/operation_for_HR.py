@@ -451,7 +451,7 @@ def update_gardener_job():
     if g.user['position'] == 'human resource' and request.method == 'POST':
         id = request.args.get('id')
         staff_execute_id = request.get_json().get('staff_execute_id')
-        status = request.get_json().get('status')
+        note = request.get_json().get('note')
         created_by_id = str(g.user['id'])
         db = get_db()
         error = None
@@ -461,9 +461,6 @@ def update_gardener_job():
             return jsonify({'message': 'update failed. ' + error}), 200
         if not staff_execute_id:
             error = "Staff's identifier is required."
-            return jsonify({'message': 'update failed. ' + error}), 200
-        elif not status:
-            error = "Status is required. In case the name is duplicate."
             return jsonify({'message': 'update failed. ' + error}), 200
         elif not created_by_id:
             error = "Creator's id is required."
@@ -478,9 +475,9 @@ def update_gardener_job():
                     return jsonify({'message': 'update failed. Employee is not exsit in roster.'}), 200
             try:
                 db.execute(
-                    'UPDATE gardener_monitoring SET staff_execute_id = ?, status = ?, created_by_id = ?'
+                    'UPDATE gardener_monitoring SET staff_execute_id = ?, note = ?, created_by_id = ?'
                     ' WHERE id = ?',
-                    (staff_execute_id, status, created_by_id, id),
+                    (staff_execute_id, note, created_by_id, id),
                 )
                 db.commit()
             except db.IntegrityError:
@@ -715,7 +712,7 @@ def create_linen_room_job():
         belonging_room_id = request.get_json().get('belonging_room_id').strip()
         status = request.get_json().get('status')
         staff_execute_id = request.get_json().get('staff_execute_id').strip()
-        staff_laundry_id = request.get_json().get('staff_laundry_id').strip()
+        staff_laundry_id = request.get_json().get('staff_laundry_id')
         note = request.get_json().get('note')
         created_by_id = str(g.user['id'])
         db = get_db()

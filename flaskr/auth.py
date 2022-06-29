@@ -84,7 +84,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user['id']
-            return jsonify({'message': 'login successful'}), 200
+            return jsonify({'message': 'login successful', 'position': user['position']}), 200
             #return redirect(url_for('index'))
 
         flash(error)
