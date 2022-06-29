@@ -384,3 +384,70 @@ def get_waiter_infor():
 
     return jsonify({'message': message}), 200
 
+@bp.route('/updateInformation', methods=('GET', 'POST'))
+@login_required
+def update_hotel():
+    if request.method == 'POST':
+        id = request.args.get('id')
+        username = request.get_json().get('username')
+        password = request.get_json().get('password')
+        name = request.get_json().get('name')
+        phone = request.get_json().get('phone')
+        working_at = request.get_json().get('working_at')
+        position = request.get_json().get('position')
+        error = None
+
+        if not name:
+            error = 'Name is required.'
+            return jsonify({'message': 'update failed. ' + error}), 200
+        if not username:
+            error = 'username is required.'
+            return jsonify({'message': 'update failed. ' + error}), 200
+        if not password:
+            error = 'password is required.'
+            return jsonify({'message': 'update failed. ' + error}), 200
+        if not phone:
+            error = 'phone is required.'
+            return jsonify({'message': 'update failed. ' + error}), 200
+        if not working_at:
+            error = 'working_at is required.'
+            return jsonify({'message': 'update failed. ' + error}), 200
+        if not position:
+            error = 'position is required.'
+            return jsonify({'message': 'update failed. ' + error}), 200
+
+        if error is None:
+            db = get_db()
+            db.execute(
+                'UPDATE account SET name = ?, username = ?, password = ?, phone = ?, working_at = ?, position = ?'
+                ' WHERE id = ?',
+                (name, username, password, phone, working_at, position, id)
+            )
+            db.commit()
+            return jsonify({'message': 'update successful.'}), 200
+
+    return jsonify({'message': 'update information failed, require admin acc or HTTP Methods wrong.'}), 200
+
+@bp.route('/deleteInformation', methods=('POST',))
+@login_required
+def delete_hotel():
+    if g.user['position'] == 'admin' and request.method == 'POST':
+        id = request.args.get('id')
+        db = get_db()
+        db.execute('DELETE FROM account WHERE id = ?', (id,))
+        db.commit()
+        return jsonify({'message': 'delete successful.'}), 200
+    
+    return jsonify({'message': 'delete information failed, require admin acc or HTTP Methods wrong.'}), 200
+
+@bp.route('/forgotPass', methods=('POST',))
+@login_required
+def delete_hotel():
+    if g.user['position'] == 'admin' and request.method == 'POST':
+        id = request.args.get('id')
+        db = get_db()
+        db.execute('DELETE FROM hotel WHERE id = ?', (id,))
+        db.commit()
+        return jsonify({'message': 'delete successful.'}), 200
+    
+    return jsonify({'message': 'delete hotel information failed, require admin acc or HTTP Methods wrong.'}), 200
