@@ -386,7 +386,7 @@ def get_waiter_infor():
 
 @bp.route('/updateInformation', methods=('GET', 'POST'))
 @login_required
-def update_hotel():
+def update_information():
     if request.method == 'POST':
         id = request.args.get('id')
         username = request.get_json().get('username')
@@ -430,7 +430,7 @@ def update_hotel():
 
 @bp.route('/deleteInformation', methods=('POST',))
 @login_required
-def delete_hotel():
+def delete_information():
     if g.user['position'] == 'admin' and request.method == 'POST':
         id = request.args.get('id')
         db = get_db()
@@ -442,7 +442,7 @@ def delete_hotel():
 
 @bp.route('/forgotPass', methods=('POST',))
 @login_required
-def delete_hotel():
+def change_pass():
     if g.user['position'] == 'admin' and request.method == 'POST':
         id = request.args.get('id')
         db = get_db()
