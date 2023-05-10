@@ -11,6 +11,4 @@ $ pip install Flask
 
 3. Run The Application
 
-$ export FLASK_APP=flaskr<br>
-$ export FLASK_ENV=development<br>
-$ flask run
+$ flask --debug --app flaskr run
