@@ -53,4 +53,7 @@ def create_app(test_config=None):
     from . import operation_for_remain_employees
     app.register_blueprint(operation_for_remain_employees.bp)
 
+    from . import operation_for_receptionist
+    app.register_blueprint(operation_for_receptionist.bp)
+
     return app

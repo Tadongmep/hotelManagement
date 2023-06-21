@@ -62,6 +62,26 @@ CREATE TABLE rooms (
   belonging_to TEXT NOT NULL,
   kind_of_room TEXT NOT NULL,
   room_name TEXT UNIQUE NOT NULL,
+  status TEXT DEFAULT 'Ready',
+    -- Occupied: Khách hiện đang ở trong phòng
+    -- Stayover: Khách không phải trả phòng ngày hôm nay và sẽ còn lại ít nhất một đêm nữa.
+    -- On-change: Khách đã check out, nhưng phòng vẫn chưa được làm sạch để bán.
+    -- Do not Disturb: Khách đã yêu cầu không được làm phiền
+    -- Cleaning in progress: Nhân viên buồng phòng hiện đang làm sạch phòng này.
+    -- Sleep-out: Một khách được đăng ký vào phòng, nhưng giường đã không được sử dụng.
+    -- On-Queue: Khách đã đến khách sạn, nhưng phòng chưa sẵn sàng. Trong những trường hợp như vậy, phòng được đưa vào xếp hạng Queue theo yêu cầu của nhân viên buồng phòng để ưu tiên các phòng đó trước tiên.
+    -- Skipper: Khách đã rời khỏi khách sạn mà không được sắp xếp để giải quyết thanh toán.
+    -- Vacant and ready: Phòng đã được làm sạch, kiểm tra và đã sẵn sàng cho khách đến.
+    -- Out of Order (OOO): Phòng không được bán và các phòng này sẽ được khấu trừ khỏi hàng tồn kho của khách sạn. Một phòng có thể không hợp lệ vì nhiều lý do khác nhau, bao gồm nhu cầu bảo trì, tân trang và làm sạch tổng thể…
+    -- Out of service (OOS): Các phòng không đảm bảo dịch vụ để phục vụ khách. Đây là biện pháp tạm thời và các lý do có thể là cầu chì, bóng đèn, TV, ấm đun nước… không hoạt động. Những phòng này không được chỉ định cho khách cho đến khi những vấn đề bảo trì nhỏ này được khắc phục.
+    -- Lock out: Phòng đã bị khóa để khách không thể vào lại cho đến khi người đó được kiểm tra bởi nhân viên khách sạn.
+    -- DNCO (không check out): Khách đã sắp xếp giải quyết các khoản phí mình và rời đi mà không thông báo cho lễ tân.
+    -- Due Out: Phòng dự kiến sẽ trở thành phòng trống sau khi khách check out.
+    -- Check-out: Khách đã thanh toán hóa đơn của mình, trả lại chìa khóa phòng và rời khách sạn.
+    -- Late check-out: Khách đã yêu cầu và được phép trả phòng muộn hơn thời gian khởi hành bình thường/ tiêu chuẩn của khách sạn.
+
+  guest_name TEXT,
+  more_infor TEXT,
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (belonging_to) REFERENCES hotel (name)
 );
