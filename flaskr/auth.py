@@ -12,12 +12,12 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        username = request.args.get('username')
-        password = request.args.get('password')
-        name = request.args.get('name')
-        phone = request.args.get('phone')
-        working_at = request.args.get('working_at')
-        position = request.args.get('position')
+        username = request.get_json().get('username')
+        password = request.get_json().get('password')
+        name = request.get_json().get('name')
+        phone = request.get_json().get('phone')
+        working_at = request.get_json().get('working_at')
+        position = request.get_json().get('position')
         db = get_db()
         error = None
 
@@ -65,8 +65,8 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST': #suggest POST 
-        username = request.args.get('username')
-        password = request.args.get('password')
+        username = request.get_json().get('username')
+        password = request.get_json().get('password')
         db = get_db()
         error = None
         user = db.execute(

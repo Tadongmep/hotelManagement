@@ -14,15 +14,23 @@ bp = Blueprint('operationReceptionist', __name__)
 @login_required
 def get_room_information():
     message = 'something wrong!'
-
+    id = None
+    if request.args.get('id'):
+        id = request.args.get('id')
     if g.user['position'] == 'receptionist' and request.method == 'GET':
     # print(g.user['working_at'])
         message = []
 
         working_at = g.user['working_at']
-        rooms = get_db().execute(
-                'SELECT * FROM rooms WHERE belonging_to = ?', (working_at,)
-            ).fetchall()
+        room = None
+        if id:
+            rooms = get_db().execute(
+                    'SELECT * FROM rooms WHERE belonging_to = @0 and id = @1', (working_at, id)
+                ).fetchall()
+        else:
+            rooms = get_db().execute(
+                    'SELECT * FROM rooms WHERE belonging_to = @0', (working_at,)
+                ).fetchall()
         for room in rooms:
             temp = {}
             temp['id'] = room['id']
